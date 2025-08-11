@@ -28,14 +28,39 @@ const TOKEN_TYPES = {
 
 type TokenType = typeof TOKEN_TYPES[keyof typeof TOKEN_TYPES];
 
-interface Token {
+type Token = {
     type: TokenType
-    literal: string
+    literal: string | null
 };
+
+function newToken(type: TokenType, literal: string | null): Token {
+    return {
+        type,
+        literal,
+    } as Token;
+}
+
+const IDENTIFIER_MAP = new Map<string, TokenType>([
+    ["fn", TOKEN_TYPES.FUNCTION],
+    ["let", TOKEN_TYPES.LET],
+]);
+
+function lookupIdentifier(literal: string): TokenType {
+    const type: TokenType | undefined = IDENTIFIER_MAP.get(literal);
+    if (!type) {
+        return TOKEN_TYPES.IDENT;
+    }
+
+    return type;
+
+}
 
 export {
     TOKEN_TYPES,
+    IDENTIFIER_MAP,
     type TokenType,
-    type Token
+    type Token,
+    newToken,
+    lookupIdentifier
 };
 
