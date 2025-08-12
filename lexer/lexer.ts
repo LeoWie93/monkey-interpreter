@@ -21,9 +21,17 @@ function newLexer(input: string): Lexer {
 
 function nextTokenFromLexer(lexer: Lexer): Token {
     let token: Token;
+
+    skipWhitespaces(lexer);
     const char: string | null = lexer.currChar;
 
     switch (char) {
+        // implement forward lookup for !=
+        // implement forward lookup for negation / NOT operator
+        case "!":
+            token = newToken(TOKEN_TYPES.BANG, char);
+            break;
+        // implement forward lookup for ==
         case "=":
             token = newToken(TOKEN_TYPES.ASSIGN, char);
             break;
@@ -35,6 +43,21 @@ function nextTokenFromLexer(lexer: Lexer): Token {
             break;
         case "+":
             token = newToken(TOKEN_TYPES.PLUS, char);
+            break;
+        case "-":
+            token = newToken(TOKEN_TYPES.MINUS, char);
+            break;
+        case "/":
+            token = newToken(TOKEN_TYPES.SLASH, char);
+            break;
+        case "<":
+            token = newToken(TOKEN_TYPES.LT, char);
+            break;
+        case ">":
+            token = newToken(TOKEN_TYPES.GT, char);
+            break;
+        case "*":
+            token = newToken(TOKEN_TYPES.ASTERISK, char);
             break;
         case "(":
             token = newToken(TOKEN_TYPES.LPAREN, char);
@@ -52,11 +75,12 @@ function nextTokenFromLexer(lexer: Lexer): Token {
             token = newToken(TOKEN_TYPES.EOF, "");
             break;
         default:
-            //TODO handle newlines / whitespaces
             if (isLetter(char)) {
                 const literal: string = readIdentifier(lexer);
                 const tokenType: TokenType = lookupIdentifier(literal);
                 return newToken(tokenType, literal);
+            } else if (isDigit(char)) {
+                return newToken(TOKEN_TYPES.INT, readNumber(lexer));
             } else {
                 token = newToken(TOKEN_TYPES.ILLEGAL, char);
             }
@@ -78,7 +102,24 @@ function readIdentifier(lexer: Lexer): string {
 
 function isLetter(char: string | null): boolean {
     if (!char) return false;
+
     return ("a" <= char && char <= "z") || ("A" <= char && char <= "Z") || char == "_";
+}
+
+function isDigit(char: string | null): boolean {
+    if (!char) return false;
+
+    const digit: number = Number.parseInt(char);
+    return 0 <= digit && digit <= 9;
+}
+
+function readNumber(lexer: Lexer): string {
+    const position: number = lexer.position;
+    while (isDigit(lexer.currChar)) {
+        readChar(lexer);
+    }
+
+    return lexer.input.slice(position, lexer.position);
 }
 
 function readChar(lexer: Lexer): void {
@@ -90,6 +131,12 @@ function readChar(lexer: Lexer): void {
 
     lexer.position = lexer.readPosition;
     lexer.readPosition += 1;
+}
+
+function skipWhitespaces(lexer: Lexer): void {
+    while (lexer.currChar == " " || lexer.currChar == "\t" || lexer.currChar == "\r" || lexer.currChar == "\n") {
+        readChar(lexer);
+    }
 }
 
 export {

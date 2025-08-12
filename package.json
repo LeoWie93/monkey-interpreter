@@ -7,13 +7,15 @@
         "test": "tests"
     },
     "scripts": {
-        "test": "node --test ./tests/*"
+        "test": "npx vitest run"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "description": "",
     "devDependencies": {
-        "@types/node": "^24.2.0"
+        "@types/node": "^24.2.1",
+        "@vitest/coverage-v8": "^3.2.4",
+        "vitest": "^3.2.4"
     }
 }

@@ -11,6 +11,12 @@ const TOKEN_TYPES = {
     //OPERATORS
     ASSIGN: "=",
     PLUS: "+",
+    MINUS: "-",
+    ASTERISK: "*",
+    SLASH: "/",
+    BANG: "!",
+    LT: "<",
+    GT: ">",
 
     //DELIMITERS
     COMMA: ",",
@@ -24,6 +30,11 @@ const TOKEN_TYPES = {
     //KEYWORDS
     LET: "LET",
     FUNCTION: "FUNCTION",
+    TRUE: "TRUE",
+    FALSE: "FALSE",
+    IF: "IF",
+    ELSE: "ELSE",
+    RETURN: "RETURN",
 } as const;
 
 type TokenType = typeof TOKEN_TYPES[keyof typeof TOKEN_TYPES];
@@ -43,6 +54,11 @@ function newToken(type: TokenType, literal: string | null): Token {
 const IDENTIFIER_MAP = new Map<string, TokenType>([
     ["fn", TOKEN_TYPES.FUNCTION],
     ["let", TOKEN_TYPES.LET],
+    ["true", TOKEN_TYPES.TRUE],
+    ["false", TOKEN_TYPES.FALSE],
+    ["if", TOKEN_TYPES.IF],
+    ["else", TOKEN_TYPES.ELSE],
+    ["return", TOKEN_TYPES.RETURN],
 ]);
 
 function lookupIdentifier(literal: string): TokenType {
