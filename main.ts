@@ -1,5 +1,5 @@
-import { TOKEN_TYPES, type Token, newToken } from "./token/token.ts";
+import { startRepl } from "./repl/repl.ts";
 
-const someToken: Token = newToken(TOKEN_TYPES.ILLEGAL, "blah");
-console.log(someToken);
-
+console.log("Hello this is the Monkey Programming Language");
+console.log("Feel free to type andy command!");
+startRepl();

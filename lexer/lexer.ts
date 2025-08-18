@@ -19,21 +19,43 @@ function newLexer(input: string): Lexer {
     return lexer;
 }
 
+function peakNextChar(lexer: Lexer): string | null {
+    if (lexer.readPosition < lexer.input.length) {
+        return lexer.input.charAt(lexer.readPosition);
+    } else {
+        return null;
+    }
+}
+
 function nextTokenFromLexer(lexer: Lexer): Token {
     let token: Token;
 
-    skipWhitespaces(lexer);
+    eatWhitespaces(lexer);
     const char: string | null = lexer.currChar;
 
     switch (char) {
-        // implement forward lookup for !=
-        // implement forward lookup for negation / NOT operator
         case "!":
-            token = newToken(TOKEN_TYPES.BANG, char);
+            // implement "handleTwoCharToken()"
+            switch (peakNextChar(lexer)) {
+                case "=":
+                    readChar(lexer);
+                    token = newToken(TOKEN_TYPES.NOT_EQUALS, TOKEN_TYPES.NOT_EQUALS);
+                    break;
+                default:
+                    token = newToken(TOKEN_TYPES.BANG, char);
+            }
+
             break;
-        // implement forward lookup for ==
         case "=":
-            token = newToken(TOKEN_TYPES.ASSIGN, char);
+            switch (peakNextChar(lexer)) {
+                case "=":
+                    readChar(lexer);
+                    token = newToken(TOKEN_TYPES.EQUALS, TOKEN_TYPES.EQUALS);
+                    break;
+                default:
+                    token = newToken(TOKEN_TYPES.ASSIGN, char);
+            }
+
             break;
         case ",":
             token = newToken(TOKEN_TYPES.COMMA, char);
@@ -113,6 +135,7 @@ function isDigit(char: string | null): boolean {
     return 0 <= digit && digit <= 9;
 }
 
+//TODO also read floats
 function readNumber(lexer: Lexer): string {
     const position: number = lexer.position;
     while (isDigit(lexer.currChar)) {
@@ -133,7 +156,9 @@ function readChar(lexer: Lexer): void {
     lexer.readPosition += 1;
 }
 
-function skipWhitespaces(lexer: Lexer): void {
+// we do not care about white spaces.
+// but maybe later for an lsp
+function eatWhitespaces(lexer: Lexer): void {
     while (lexer.currChar == " " || lexer.currChar == "\t" || lexer.currChar == "\r" || lexer.currChar == "\n") {
         readChar(lexer);
     }

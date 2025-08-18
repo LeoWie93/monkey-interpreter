@@ -18,6 +18,12 @@ const TOKEN_TYPES = {
     LT: "<",
     GT: ">",
 
+
+    EQUALS: "==",
+    NOT_EQUALS: "!=",
+    //LEQ "<="
+    //GEQ ">="
+
     //DELIMITERS
     COMMA: ",",
     SEMICOLON: ";",
@@ -26,10 +32,12 @@ const TOKEN_TYPES = {
     RPAREN: ")",
     LBRACE: "{",
     RBRACE: "}",
+    // arrays? []
 
     //KEYWORDS
-    LET: "LET",
     FUNCTION: "FUNCTION",
+    LET: "LET",
+    // const => make this script lang immutable?
     TRUE: "TRUE",
     FALSE: "FALSE",
     IF: "IF",
