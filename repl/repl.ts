@@ -4,10 +4,16 @@ import * as readline from "node:readline";
 import { stdin, stdout } from "node:process";
 
 function startRepl(): void {
-    const rl: any = readline.createInterface(stdin, stdout);
+    const rl: readline.Interface = readline.createInterface(stdin, stdout);
 
     console.info(">> ");
-    rl.on('line', (line: string) => {
+    rl.on('line', function(line: string): void {
+
+        if (line == "exit") {
+            rl.close();
+            return;
+        }
+
         const lexer: Lexer = newLexer(line);
 
         let token: Token = nextTokenFromLexer(lexer)

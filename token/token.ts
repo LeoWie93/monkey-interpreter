@@ -56,7 +56,7 @@ function newToken(type: TokenType, literal: string | null): Token {
     return {
         type,
         literal,
-    } as Token;
+    };
 }
 
 const IDENTIFIER_MAP = new Map<string, TokenType>([

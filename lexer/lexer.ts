@@ -13,7 +13,7 @@ function newLexer(input: string): Lexer {
         "position": 0,
         "readPosition": 0,
         "currChar": "",
-    } as Lexer;
+    };
 
     readChar(lexer);
     return lexer;
